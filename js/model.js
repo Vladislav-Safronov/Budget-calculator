@@ -10,6 +10,25 @@ export default class Model {
         }
 
         this.percentage = -1;  // % для суммы расходов
+
+        this.loadFromLocalStorage();
+    }
+
+    loadFromLocalStorage() {
+        const incData = localStorage.getItem('incomes');
+        if (incData) {
+            this.incomes = JSON.parse(incData);
+        }
+
+        const expData = localStorage.getItem('expenses');
+        if (expData) {
+            this.expenses = JSON.parse(expData);
+        } 
+    }
+
+    saveToLocalStorage() {
+        localStorage.setItem('incomes', JSON.stringify(this.incomes));
+        localStorage.setItem('expenses', JSON.stringify(this.expenses));
     }
 
     // Проверка на заполненность формы
@@ -41,6 +60,8 @@ export default class Model {
 
         this.incomes.push(newIncomeFlow);
 
+        this.saveToLocalStorage();
+
         return newIncomeFlow;
     }
 
@@ -60,6 +81,8 @@ export default class Model {
         }
 
         this.expenses.push(newExpensesFlow);
+
+        this.saveToLocalStorage();
 
         return newExpensesFlow;
     }
@@ -140,6 +163,8 @@ export default class Model {
             const index = this.expenses.indexOf(liObject)
             this.expenses.splice(index, 1);
         }
+
+        this.saveToLocalStorage();
     }
 
 

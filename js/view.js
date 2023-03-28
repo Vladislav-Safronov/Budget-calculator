@@ -1,5 +1,15 @@
 export default class View {
-    constructor() {}
+    constructor(incArr, expArr,) {
+        this.displayMonth();
+
+        for (let incObj of incArr) {
+            this.renderCashFlow(incObj);
+        }
+
+        for (let expObj of expArr) {
+            this.renderCashFlow(expObj);
+        }
+    }
 
 
     elements = {
@@ -16,6 +26,9 @@ export default class View {
         totalExp: document.querySelector('#totalExp'),  // все расходы
         budget: document.querySelector('#budget'),  // общий бюджет
         percentageOfExpenses: document.querySelector('#percentage'),  // процент для всех расходов
+
+        monthLable: document.querySelector('#month'),  // текущий месяц
+        yearLable: document.querySelector('#year'),  // текущий год
     }
 
     // Отображение доходов/расходов на странице
@@ -27,7 +40,7 @@ export default class View {
                         `<li data-id="${CashFlowObject.id}" data-type="inc" class="budget-list__item item item--income">
                             <div class="item__title">${CashFlowObject.description}</div>
                             <div class="item__right">
-                                <div class="item__amount">+ ${CashFlowObject.value}</div>
+                                <div class="item__amount">+ ${this.formatNumber(CashFlowObject.value)}</div>
                                 <button class="item__remove">
                                     <img
                                         src="./img/circle-green.svg"
@@ -46,7 +59,7 @@ export default class View {
                             <div class="item__title">${CashFlowObject.description}</div>
                             <div class="item__right">
                                 <div class="item__amount">
-                                    + ${CashFlowObject.value}
+                                    + ${this.formatNumber(CashFlowObject.value)}
                                     <div class="item__badge">
                                         <div data-ownPercentage class="badge badge--dark">
                                             
@@ -73,20 +86,20 @@ export default class View {
     // Отображение итогов бюджета
     renderBudget(totalIncValue, totalExpValue, budget, percentage) {
         // Отображение доходов/расходов
-        this.elements.totalInc.innerText = `+ ${totalIncValue}`;
-        this.elements.totalExp.innerText = `- ${totalExpValue}`;
+        this.elements.totalInc.innerText = `+ ${this.formatNumber(totalIncValue)}`;
+        this.elements.totalExp.innerText = `- ${this.formatNumber(totalExpValue)}`;
 
         // Отображение общего бюджета
         if (budget > 0) {
-            this.elements.budget.innerText = `+ ${budget}`;
+            this.elements.budget.innerText = `+ ${this.formatNumber(budget)}`;
         } else {
-            this.elements.budget.innerText = budget;
+            this.elements.budget.innerText = this.formatNumber(budget);
         }
         
         // Отображение процентов для расходов
         // Если есть доходы:
         if (percentage != -1) {
-            this.elements.percentageOfExpenses.innerText = `${percentage}%`;
+            this.elements.percentageOfExpenses.innerText = `${this.formatNumber(percentage)}%`;
         // Если доходов нет:
         } else {
             this.elements.percentageOfExpenses.innerText = '';
@@ -112,7 +125,7 @@ export default class View {
             // Если есть доходы:
             if (item.ownPercentage != -1) {
                 const changingLi = this.elements.expensesList.querySelector(`[data-id="${item.id}"]`);
-                changingLi.querySelector('[data-ownPercentage]').innerText = `${item.ownPercentage}%`;
+                changingLi.querySelector('[data-ownPercentage]').innerText = `${this.formatNumber(item.ownPercentage)}%`;
             // Если доходов нет:
             } else {
                 const changingLi = this.elements.expensesList.querySelector(`[data-id="${item.id}"]`);
@@ -126,6 +139,22 @@ export default class View {
     formatNumber(num) {
         let n = num.toString();
         return n.replace(/(\d{1,3}(?=(?:\d\d\d)+(?!\d)))/g, "$1" + ",");
+    }
+
+    // Отображение текущего года и месяца
+    displayMonth() {
+        let now, year, month, monthArr;
+
+        now = new Date();
+        year = now.getFullYear();
+        month = now.getMonth();
+
+        monthArr = ['Январь', 'Феварль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',];
+
+        month = monthArr[month];
+
+        this.elements.monthLable.innerText = month;
+        this.elements.yearLable.innerText = year;
     }
 
 }
