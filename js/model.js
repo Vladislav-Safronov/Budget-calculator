@@ -12,6 +12,7 @@ export default class Model {
         this.percentage = -1;  // % для суммы расходов
 
         this.loadFromLocalStorage();
+        this.calcOwnPercentage();
     }
 
     loadFromLocalStorage() {
@@ -24,6 +25,16 @@ export default class Model {
         if (expData) {
             this.expenses = JSON.parse(expData);
         } 
+
+        const budget = localStorage.getItem('budget');
+        if (budget) {
+            this.totals = JSON.parse(budget);
+        }
+
+        const percentage = localStorage.getItem('percentage');
+        if (percentage) {
+            this.percentage = JSON.parse(percentage);
+        }
     }
 
     saveToLocalStorage() {
@@ -113,6 +124,9 @@ export default class Model {
         } else {
             this.percentage = -1
         }
+
+        localStorage.setItem('budget', JSON.stringify(this.totals));
+        localStorage.setItem('percentage', JSON.stringify(this.percentage));
         
     }
 

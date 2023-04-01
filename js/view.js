@@ -1,5 +1,5 @@
 export default class View {
-    constructor(incArr, expArr,) {
+    constructor(incArr, expArr, totals, percentage) {
         this.displayMonth();
 
         for (let incObj of incArr) {
@@ -9,6 +9,8 @@ export default class View {
         for (let expObj of expArr) {
             this.renderCashFlow(expObj);
         }
+
+        this.renderBudget(totals.inc, totals.exp, totals.budget, percentage);
     }
 
 
@@ -62,7 +64,7 @@ export default class View {
                                     + ${this.formatNumber(CashFlowObject.value)}
                                     <div class="item__badge">
                                         <div data-ownPercentage class="badge badge--dark">
-                                            
+                                            ${CashFlowObject.ownPercentage + '%'}
                                         </div>
                                     </div>
                                 </div>

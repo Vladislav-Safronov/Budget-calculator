@@ -2,7 +2,7 @@ import Model from './model.js';
 import View from './view.js';
 // -------------------------- //
 const model = new Model();
-const view = new View(model.incomes, model.expenses,);
+const view = new View(model.incomes, model.expenses, model.totals, model.percentage);
 // -------------------------- //
 
 // Отправка формы, добавление дохода/расхода
